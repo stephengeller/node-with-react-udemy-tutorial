@@ -25,23 +25,21 @@ passport.use(
 			callbackURL: '/auth/google/callback',
 			proxy: true
 		},
-		(accessToken, refreshToken, profile, done) => {
-			console.log('profile: ' + profile.name);
+		async (accessToken, refreshToken, profile, done) => {
 			// This query returns a PROMISE, which a tool to handle async code
-			User.findOne({ userId: profile.id }).then(existingUser => {
-				if (existingUser) {
-					// Tells passport that we're done with the callback
-					// Passes null as 'no issues', and existingUser as the user!
-					done(null, existingUser);
-				} else {
-					// create new user
-					new User({ userId: profile.id })
-						// Save it to the DB
-						.save()
-						// tells passport done with this process and return user
-						.then(user => done(null, user));
-				}
+			const existingUser = await User.findOne({
+				userId: profile.id
 			});
+			if (existingUser) {
+				// Tells passport that we're done with the callback
+				// Passes null as 'no issues', and existingUser as the user!
+				return done(null, existingUser);
+			}
+			// create new user
+			// Save it to the DB
+			const user = await new User({ userId: profile.id }).save();
+			// tells passport done with this process and return user
+			done(null, user);
 		}
 	)
 );
@@ -55,7 +53,6 @@ passport.use(
 			proxy: true
 		},
 		(accessToken, refreshToken, profile, done) => {
-			console.log('profile: ' + profile.name);
 			User.findOne({ userId: profile.id }).then(existingUser => {
 				if (existingUser) {
 					done(null, existingUser);
