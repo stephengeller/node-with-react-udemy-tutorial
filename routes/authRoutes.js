@@ -9,15 +9,28 @@ module.exports = app => {
 		})
 	);
 
-	app.get('/auth/google/callback', passport.authenticate('google'));
+	app.get('/auth/google/callback', passport.authenticate('google')),
+		(req, res) => {
+			res.redirect('/api/current_user');
+		};
+
+	app.get('/api/current_user', (req, res) => {
+		// passport automatically attaches req.user, as it's from the cookie
+		res.send(req.user);
+	});
+
+	app.get('/api/logout', (req, res) => {
+		req.logout();
+		res.send(req.user);
+	});
 
 	app.get('/auth/facebook', passport.authenticate('facebook'));
 
 	app.get(
 		'/auth/facebook/return',
 		passport.authenticate('facebook', { failureRedirect: '/login' }),
-		function(req, res) {
-			res.redirect('/');
+		(req, res) => {
+			res.redirect('/api/current_user');
 		}
 	);
 };

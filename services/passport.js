@@ -6,6 +6,17 @@ const keys = require('./../config/keys');
 
 const User = mongoose.model('users');
 
+passport.serializeUser((user, done) => {
+	// first arg is always error if there is one
+	done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+	User.findById(id).then(user => {
+		done(null, user);
+	});
+});
+
 passport.use(
 	new GoogleStrategy(
 		{
@@ -16,14 +27,14 @@ passport.use(
 		(accessToken, refreshToken, profile, done) => {
 			console.log('profile: ' + profile.name);
 			// This query returns a PROMISE, which a tool to handle async code
-			User.findOne({ Id: profile.id }).then(existingUser => {
+			User.findOne({ userId: profile.id }).then(existingUser => {
 				if (existingUser) {
 					// Tells passport that we're done with the callback
 					// Passes null as 'no issues', and existingUser as the user!
 					done(null, existingUser);
 				} else {
 					// create new user
-					new User({ Id: profile.id })
+					new User({ userId: profile.id })
 						// Save it to the DB
 						.save()
 						// tells passport done with this process and return user
@@ -43,11 +54,13 @@ passport.use(
 		},
 		(accessToken, refreshToken, profile, done) => {
 			console.log('profile: ' + profile.name);
-			User.findOne({ Id: profile.id }).then(existingUser => {
+			User.findOne({ userId: profile.id }).then(existingUser => {
 				if (existingUser) {
 					done(null, existingUser);
 				} else {
-					new User({ Id: profile.id }).save().then(user => done(null, user));
+					new User({ userId: profile.id })
+						.save()
+						.then(user => done(null, user));
 				}
 			});
 		}

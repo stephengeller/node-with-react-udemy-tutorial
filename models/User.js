@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-	Id: String,
+	userId: String,
 	name: String
 });
 
