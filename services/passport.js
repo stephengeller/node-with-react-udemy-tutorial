@@ -50,7 +50,7 @@ passport.use(
 		{
 			clientID: keys.facebookClientID,
 			clientSecret: keys.facebookClientSecret,
-			callbackURL: 'http://localhost:5000/auth/facebook/return'
+			callbackURL: 'auth/facebook/return'
 		},
 		(accessToken, refreshToken, profile, done) => {
 			console.log('profile: ' + profile.name);
