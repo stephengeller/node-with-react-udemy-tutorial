@@ -31,7 +31,6 @@ app.use(passport.session());
 // CALLS THE FUNCTION IMMEDIATELY!
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
-require('./routes/index')(app);
 
 if (process.env.NODE_ENV === 'production') {
 	// Make sure express serves up production assets
