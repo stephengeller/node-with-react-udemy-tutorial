@@ -9,10 +9,13 @@ module.exports = app => {
 		})
 	);
 
-	app.get('/auth/google/callback', passport.authenticate('google')),
+	app.get(
+		'/auth/google/callback',
+		passport.authenticate('google'),
 		(req, res) => {
-			res.redirect('/api/current_user');
-		};
+			res.redirect('/surveys');
+		}
+	);
 
 	app.get('/api/current_user', (req, res) => {
 		// passport automatically attaches req.user, as it's from the cookie
@@ -21,7 +24,7 @@ module.exports = app => {
 
 	app.get('/api/logout', (req, res) => {
 		req.logout();
-		res.send(req.user);
+		res.redirect('/');
 	});
 
 	app.get('/auth/facebook', passport.authenticate('facebook'));
@@ -30,7 +33,7 @@ module.exports = app => {
 		'/auth/facebook/return',
 		passport.authenticate('facebook', { failureRedirect: '/login' }),
 		(req, res) => {
-			res.redirect('/api/current_user');
+			res.redirect('/surveys');
 		}
 	);
 };
