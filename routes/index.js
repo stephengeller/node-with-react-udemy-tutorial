@@ -1,5 +1,5 @@
 module.exports = app => {
 	app.get('/', (req, res) => {
-		res.send('welcome');
+		res.render('./client/build/static/index');
 	});
 };

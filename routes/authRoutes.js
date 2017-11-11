@@ -17,16 +17,6 @@ module.exports = app => {
 		}
 	);
 
-	app.get('/api/current_user', (req, res) => {
-		// passport automatically attaches req.user, as it's from the cookie
-		res.send(req.user);
-	});
-
-	app.get('/api/logout', (req, res) => {
-		req.logout();
-		res.redirect('/');
-	});
-
 	app.get('/auth/facebook', passport.authenticate('facebook'));
 
 	app.get(
@@ -36,4 +26,14 @@ module.exports = app => {
 			res.redirect('/surveys');
 		}
 	);
+
+	app.get('/api/current_user', (req, res) => {
+		// passport automatically attaches req.user, as it's from the cookie
+		res.send(req.user);
+	});
+
+	app.get('/api/logout', (req, res) => {
+		req.logout();
+		res.redirect('/');
+	});
 };
