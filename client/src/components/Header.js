@@ -5,6 +5,7 @@ import StripeWrapper from './StripeWrapper';
 
 class Header extends Component {
 	renderContent() {
+		console.log(this.props.auth);
 		switch (this.props.auth) {
 		case null:
 			return;
@@ -27,6 +28,9 @@ class Header extends Component {
 				</li>,
 				<li key="3">
 					<a href="/api/logout">Logout</a>
+				</li>,
+				<li key="4" style={{ margin: '0 10px' }}>
+						Welcome {this.props.auth.name.split(' ')[0]}
 				</li>
 			];
 		}

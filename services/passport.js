@@ -30,6 +30,7 @@ passport.use(
 			const existingUser = await User.findOne({
 				userId: profile.id
 			});
+			console.log(profile);
 			if (existingUser) {
 				// Tells passport that we're done with the callback
 				// Passes null as 'no issues', and existingUser as the user!
@@ -37,7 +38,10 @@ passport.use(
 			}
 			// create new user
 			// Save it to the DB
-			const user = await new User({ userId: profile.id }).save();
+			const user = await new User({
+				userId: profile.id,
+				name: profile.displayName
+			}).save();
 			// tells passport done with this process and return user
 			done(null, user);
 		}
@@ -57,7 +61,7 @@ passport.use(
 				if (existingUser) {
 					done(null, existingUser);
 				} else {
-					new User({ userId: profile.id })
+					new User({ userId: profile.id, name: profile.displayName })
 						.save()
 						.then(user => done(null, user));
 				}
